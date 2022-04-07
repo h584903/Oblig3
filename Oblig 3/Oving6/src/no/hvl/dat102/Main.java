@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Main {
 	public static void main(String[] args) {
-		int antall = 54000; // vi ser at 54000 tar cirka 5 sek
+		int antall = 15; // vi ser at 54000 tar cirka 5 sek
 		int maxTall = 99999;
 		
 		long seed = 102420;
@@ -16,15 +16,25 @@ public class Main {
 		
 		Integer[] data = Sorter.createTable(antall, maxTall, seed);
 		
+		tableCheck(data);
 		
-		Sorter.first(data, antall);
-
+		Sorter.merge(data);
 		
-		long gjennomsnittsTid = Sorter.insertions2(data, runder)/runder;
-		System.out.println("\n\nGjennomsnittstiden ble: " + gjennomsnittsTid/1000000 + " ms");
+		tableCheck(data);
+		//Sorter.first(data, antall);
+		
+		//long gjennomsnittsTid = Sorter.insertions2(data, runder)/runder;
+		//System.out.println("\n\nGjennomsnittstiden ble: " + gjennomsnittsTid/1000000 + " ms");
 		
 		//Sorter.insertion2(data);
 
 		
+	}
+	
+	public static void tableCheck(Integer[] data) {
+		for (Integer e : data) {
+			System.out.print(e + " ");
+		}
+		System.out.print("\n\n");
 	}
 }

@@ -98,6 +98,68 @@ public class SorterTabell {
 		return elapsedTime;
 	}
 	
+	public long selection(Integer[] data) {
+		long start = System.nanoTime();
+		for (int i = 0; i < data.length-1; i++) {
+			for (int j = i; j < data.length; j++) {
+				if (data[i] > data[j])
+					swap(data, j, i);
+			}
+		}
+		long finish = System.nanoTime();
+		long elapsedTime = finish-start;
+		return elapsedTime;
+	}
+	
+	public long merge(Integer[] data) {
+		long start = System.nanoTime();
+		
+		int length = data.length;
+		
+		if (length < 2) {
+	        return 0;
+	    }
+	    int left = length / 2;
+	    int right = length-left;
+	    Integer[] leftData = new Integer[left];
+	    Integer[] rightData = new Integer[right];
+
+	    // Plasserer dataene i tabellene
+	    for (int i = 0; i < left; i++) {
+	        leftData[i] = data[i];
+	    }
+	    for (int i = left; i < length; i++) {
+	        rightData[i - left] = data[i];
+	    }
+	    
+	    // rekursivt kaller metoden på venstre og høyre siden
+	    merge(leftData);
+	    merge(rightData);
+	    
+	    
+	    // samler sammen alt
+	    int i = 0, j = 0, k = 0;
+	    while (i < left && j < right) {
+	        if (leftData[i] <= rightData[j]) {
+	            data[k++] = leftData[i++];
+	        }
+	        else {
+	            data[k++] = rightData[j++];
+	        }
+	    }
+	    while (i < left) {
+	        data[k++] = leftData[i++];
+	    }
+	    while (j < right) {
+	        data[k++] = rightData[j++];
+	    }
+		
+		long finish = System.nanoTime();
+		long elapsedTime = finish-start;
+		return elapsedTime;
+	}
+	
+	
 	public long insertions1(Integer[] data, int rounds) {
 		System.out.println("Progress: ");
 		long totalTime = 0;
@@ -105,11 +167,7 @@ public class SorterTabell {
 			Integer[] temp = data.clone();
 			totalTime =+ insertion1(temp);
 			
-			float percent = i+1;
-			percent = percent/rounds;
-			percent = percent*100;
-			int percentFinal = (int) percent;
-			System.out.print(percentFinal + "%, ");
+			progress(i,rounds);
 		}
 		
 		
@@ -123,14 +181,19 @@ public class SorterTabell {
 			Integer[] temp = data.clone();
 			totalTime =+ insertion2(temp);
 			
-			float percent = i+1;
-			percent = percent/rounds;
-			percent = percent*100;
-			int percentFinal = (int) percent;
-			System.out.print(percentFinal + "%, ");
+			progress(i,rounds);
 		}
 		
 		
 		return totalTime;
 	}
+	
+	public static void progress(int round, int rounds) {
+		float percent = round+1;
+		percent = percent/rounds;
+		percent = percent*100;
+		int percentFinal = (int) percent;
+		System.out.print(percentFinal + "%, ");
+	}
+	
 }
